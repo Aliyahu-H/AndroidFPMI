@@ -3,23 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_favorite">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.petexchange.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_favorite"
+        android:name="com.example.petexchange.ui.favorite.FavoriteFragment"
+        android:label="@string/menu_favorite"
+        tools:layout="@layout/fragment_favorite" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.petexchange.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_exchange"
+        android:name="com.example.petexchange.ui.exchange.ExchangeFragment"
+        android:label="@string/menu_exchange"
+        tools:layout="@layout/fragment_exchange" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.petexchange.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_schedule"
+        android:name="com.example.petexchange.ui.schedule.ScheduleFragment"
+        android:label="@string/menu_schedule"
+        tools:layout="@layout/fragment_schedule" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.petexchange.ui.settings.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

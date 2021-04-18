@@ -1,4 +1,4 @@
-package com.example.petexchange.ui.exchange
+package com.example.petexchange.ui.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.petexchange.R
 
-class ExchangeFragment : Fragment() {
+class SettingsFragment : Fragment() {
 
-    private lateinit var exchangeViewModel: ExchangeViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        exchangeViewModel =
-                ViewModelProvider(this).get(ExchangeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_exchange, container, false)
-        val textView: TextView = root.findViewById(R.id.text_exchange)
-        exchangeViewModel.text.observe(viewLifecycleOwner, Observer {
+        settingsViewModel =
+                ViewModelProvider(this).get(SettingsViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_settings, container, false)
+        val textView: TextView = root.findViewById(R.id.text_settings)
+        settingsViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root
