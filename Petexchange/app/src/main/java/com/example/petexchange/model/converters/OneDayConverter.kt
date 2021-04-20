@@ -10,26 +10,30 @@ class OneDayConverter(
     private val exchangeRateReceiver: ExchangeRateReceiver,
     private val exchangeRateSaved: ExchangeRateSaved
 ) : Converter {
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd z", Locale.getDefault())
 
     override suspend fun convert(fromCurrency: String, toCurrency: String, amount: Double): Double {
         val savedCurrencyRates: MutableList<CurrencyRate> = exchangeRateSaved.getExchangeRates(
             fromCurrency,
             listOf(toCurrency)
         ).toMutableList()
-        var convertedAmount = .0
-        when {
-            savedCurrencyRates.isEmpty() -> {
-                exchangeRateReceiver.getConversion(fromCurrency, toCurrency, amount)
-            }
-            checkDate(savedCurrencyRates[0].updateDate) -> {
-                savedCurrencyRates[0].exchangeRate = exchangeRateReceiver.getExchangeRate(fromCurrency, toCurrency)
-                savedCurrencyRates[0].updateDate = dateFormat.format(Calendar.getInstance().time)
-                exchangeRateSaved.updateExchangeRates(savedCurrencyRates)
-                convertedAmount = savedCurrencyRates[0].exchangeRate*amount
-            }
-            else -> {
-                convertedAmount = savedCurrencyRates[0].exchangeRate*amount
+        var convertedAmount = amount
+        if (fromCurrency != toCurrency) {
+            when {
+                savedCurrencyRates.isEmpty() -> {
+                    exchangeRateReceiver.getConversion(fromCurrency, toCurrency, amount)
+                }
+                checkDate(savedCurrencyRates[0].updateDate) -> {
+                    savedCurrencyRates[0].exchangeRate =
+                        exchangeRateReceiver.getExchangeRate(fromCurrency, toCurrency)
+                    savedCurrencyRates[0].updateDate =
+                        dateFormat.format(Calendar.getInstance().time)
+                    exchangeRateSaved.updateExchangeRates(savedCurrencyRates)
+                    convertedAmount = savedCurrencyRates[0].exchangeRate * amount
+                }
+                else -> {
+                    convertedAmount = savedCurrencyRates[0].exchangeRate * amount
+                }
             }
         }
 
@@ -44,9 +48,9 @@ class OneDayConverter(
 
         when {
             savedCurrencyRates.isEmpty() -> {
-                val exchangeRate = 1.0
+                var exchangeRate = 1.0
                 if (fromCurrency != toCurrency) {
-                    exchangeRateReceiver.getExchangeRate(fromCurrency, toCurrency)
+                    exchangeRate = exchangeRateReceiver.getExchangeRate(fromCurrency, toCurrency)
                 }
                 savedCurrencyRates.add(CurrencyRate(fromCurrency,
                     toCurrency,
