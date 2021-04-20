@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.petexchange.R
 import com.example.petexchange.ui.currency.Currency
 import com.example.petexchange.ui.currency.CurrencyAdapter
+import com.example.petexchange.ui.favorite.FROM
+import com.example.petexchange.ui.favorite.TO
 import java.util.*
 
 const val CURRENCY = "currency"
@@ -21,7 +23,7 @@ class AddCurrencyActivity : FragmentActivity() {
         setContentView(R.layout.add_currency_layout)
         addCurrencyViewModel =
                 ViewModelProvider(this, AddCurrencyViewModelFactory(this)).get(AddCurrencyViewModel::class.java)
-        val currencyAdapter = CurrencyAdapter(addCurrencyViewModel.currencyLiveData) { flower -> adapterOnClick(flower) }
+        val currencyAdapter = CurrencyAdapter(addCurrencyViewModel.currencyLiveData) { currency -> adapterOnClick(currency) }
 
         val recyclerView: RecyclerView = findViewById(R.id.addCurrencyRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -29,9 +31,11 @@ class AddCurrencyActivity : FragmentActivity() {
     }
 
     private fun adapterOnClick(currency: Currency?) {
-        val intent = Intent()
-        intent.putExtra(CURRENCY, currency)
-        setResult(RESULT_OK, intent)
+        val new_intent = Intent()
+        new_intent.putExtra(CURRENCY, currency)
+        new_intent.putExtra(FROM, intent?.getBooleanExtra(FROM, false))
+        new_intent.putExtra(TO, intent?.getBooleanExtra(TO, false))
+        setResult(RESULT_OK, new_intent)
         finish()
     }
 }

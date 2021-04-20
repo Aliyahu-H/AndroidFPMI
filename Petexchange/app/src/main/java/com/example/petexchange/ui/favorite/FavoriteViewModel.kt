@@ -1,14 +1,10 @@
 package com.example.petexchange.ui.favorite
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.petexchange.R
 import com.example.petexchange.ui.currency.Currency
 import com.example.petexchange.ui.currency.DataSourceFavorite
-import kotlin.random.Random
 
 class FavoriteViewModel(val dataSource: DataSourceFavorite) : ViewModel() {
 

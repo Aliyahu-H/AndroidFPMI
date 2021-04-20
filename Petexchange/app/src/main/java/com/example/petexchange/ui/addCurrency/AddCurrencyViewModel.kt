@@ -9,10 +9,6 @@ import com.example.petexchange.ui.currency.DataSourceAddCurrency
 class AddCurrencyViewModel(val dataSource: DataSourceAddCurrency) : ViewModel() {
 
     val currencyLiveData = dataSource.getCurrencyList()
-
-    fun insertCurrency(currency: Currency?) {
-        dataSource.addCurrency(currency)
-    }
 }
 
 class AddCurrencyViewModelFactory(private val context: Context) : ViewModelProvider.Factory {

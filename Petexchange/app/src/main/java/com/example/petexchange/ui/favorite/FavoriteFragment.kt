@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.petexchange.R
 import com.example.petexchange.ui.currency.CurrencyAdapter
 
+const val FROM = "from"
+const val TO = "to"
+
 class FavoriteFragment : Fragment() {
 
     private lateinit var favoriteViewModel: FavoriteViewModel

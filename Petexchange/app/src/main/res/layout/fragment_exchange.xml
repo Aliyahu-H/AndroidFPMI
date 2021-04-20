@@ -1,32 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <data>
-
-        <variable
-            name="currency1"
-            type="com.example.petexchange.ui.currency.Currency" />
-
-        <variable
-            name="currency2"
-            type="com.example.petexchange.ui.currency.Currency" />
-
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.exchange.ExchangeFragment">
 
-        <include
-            app:currency="@{currency1}"
-            android:id="@+id/currency_item_1"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exchangeFromRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/currency_item"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <View
             android:id="@+id/line"
@@ -34,7 +20,7 @@
             android:layout_height="1dp"
             android:alpha="0.3"
             android:background="#FF000000"
-            app:layout_constraintTop_toBottomOf="@+id/currency_item_1"
+            app:layout_constraintTop_toBottomOf="@+id/exchangeFromRecyclerView"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
@@ -44,14 +30,12 @@
             android:src="@drawable/ic_baseline_arrow_downward_24"
             app:layout_constraintTop_toBottomOf="@+id/line"/>
 
-        <include
-            app:currency="@{currency2}"
-            android:id="@+id/currency_item_2"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exchangeToRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/currency_item"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/exchange_to" />
+            app:layout_constraintTop_toBottomOf="@+id/exchange_to"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
