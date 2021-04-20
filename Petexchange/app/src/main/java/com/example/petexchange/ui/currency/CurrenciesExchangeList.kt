@@ -6,6 +6,6 @@ import com.example.petexchange.R
 /* Returns initial list of currencies. */
 fun exchangeCurrencyList(resources: Resources): MutableSet<Currency> {
     return mutableSetOf(
-        Currency(R.drawable.ic_dollar, "RUB","USD", .0),
+        Currency(R.drawable.ic_coin, "USD","USD", 1.0),
     )
 }

@@ -1,7 +1,6 @@
 package com.example.petexchange.ui.favorite
 
 import android.content.Context
-import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.petexchange.ui.currency.Currency

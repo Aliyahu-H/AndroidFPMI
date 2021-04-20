@@ -18,9 +18,16 @@ class DataSourceFavorite(resources: Resources, context: Context) {
     private var currenciesLiveData = MutableLiveData(mutableSetOf<Currency>())
 
     suspend fun onCreate() {
-        currenciesLiveData.value?.add(Currency(R.drawable.ic_ruble, "RUB", "RUB", 1.0))
+        currenciesLiveData.value?.clear()
         converter.loadSavedExchangeRates().forEach{
             currenciesLiveData.value?.add(Currency(it))
+        }
+        if (currenciesLiveData.value!!.isEmpty()) {
+            currenciesLiveData.value?.add(Currency(
+                R.drawable.ic_coin,
+                "RUB",
+                "RUB",
+                converter.getCurrencyRate("RUB", "RUB")))
         }
     }
 
@@ -29,7 +36,7 @@ class DataSourceFavorite(resources: Resources, context: Context) {
         val currentList = currenciesLiveData.value
         val currency = Currency(
             _currency?.flag!!,
-            _currency.nameTo!!,
+            currentList?.elementAt(0)?.nameTo!!,
             _currency.nameFrom!!,
             converter.getCurrencyRate(_currency.nameFrom!!, currentList?.elementAt(0)?.nameTo!!))
         if (!currentList.contains(currency)) {

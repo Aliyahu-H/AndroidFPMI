@@ -24,7 +24,7 @@ data class Currency(@DrawableRes var flag: Int, var nameTo: String?, var nameFro
     }
 
     constructor(currencyRate: CurrencyRate) : this(
-        R.drawable.ic_dollar,
+        R.drawable.ic_coin,
         currencyRate.toCurrency,
         currencyRate.fromCurrency,
         currencyRate.exchangeRate) {
