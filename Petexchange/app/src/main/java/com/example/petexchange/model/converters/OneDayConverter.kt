@@ -44,13 +44,17 @@ class OneDayConverter(
 
         when {
             savedCurrencyRates.isEmpty() -> {
+                val exchangeRate = 1.0
+                if (fromCurrency != toCurrency) {
+                    exchangeRateReceiver.getExchangeRate(fromCurrency, toCurrency)
+                }
                 savedCurrencyRates.add(CurrencyRate(fromCurrency,
                     toCurrency,
-                    exchangeRateReceiver.getExchangeRate(fromCurrency, toCurrency),
+                    exchangeRate,
                     dateFormat.format(Calendar.getInstance().time)))
                 exchangeRateSaved.insertExchangeRates(savedCurrencyRates)
             }
-            checkDate(savedCurrencyRates[0].updateDate) -> {
+            (fromCurrency != toCurrency) and checkDate(savedCurrencyRates[0].updateDate) -> {
                 savedCurrencyRates[0].exchangeRate = exchangeRateReceiver.getExchangeRate(fromCurrency, toCurrency)
                 savedCurrencyRates[0].updateDate = dateFormat.format(Calendar.getInstance().time)
                 exchangeRateSaved.updateExchangeRates(savedCurrencyRates)
@@ -70,7 +74,9 @@ class OneDayConverter(
         ).toMutableList()
 
         if ((savedExchangeRates.size < toCurrencies.size) or
-                savedExchangeRates.any{ checkDate(it.updateDate) }) {
+                savedExchangeRates.any{
+                    checkDate(it.updateDate) and (it.fromCurrency != it.toCurrency)
+                }) {
             savedExchangeRates.clear()
             val newExchangeRates = exchangeRateReceiver.getExchangeRates(fromCurrency)
             toCurrencies.forEach {
@@ -91,7 +97,25 @@ class OneDayConverter(
     }
 
     override suspend fun loadSavedExchangeRates(): List<CurrencyRate> {
-        return exchangeRateSaved.getAllSavedExchangeRates()
+        val savedExchangeRates: MutableList<CurrencyRate> = exchangeRateSaved.getAllSavedExchangeRates().toMutableList()
+        val fromCurrencyRates: MutableMap<String, MutableList<CurrencyRate>> = mutableMapOf()
+        val toUpdateFromCurrencies: MutableSet<String> = mutableSetOf()
+
+        savedExchangeRates.forEach {
+            fromCurrencyRates[it.fromCurrency]?.add(it) ?: fromCurrencyRates.put(it.fromCurrency, mutableListOf(it))
+            if (checkDate(it.updateDate) and (it.fromCurrency != it.toCurrency)) {
+                toUpdateFromCurrencies.add(it.fromCurrency)
+            }
+        }
+
+        toUpdateFromCurrencies.forEach { fromName ->
+            val newExchangeRates = exchangeRateReceiver.getExchangeRates(fromName)
+            fromCurrencyRates[fromName]?.forEach {
+                it.exchangeRate = newExchangeRates[it.toCurrency]?: -1.0
+                it.updateDate = dateFormat.format(Calendar.getInstance().time)
+            }
+        }
+        return savedExchangeRates
     }
 
     override suspend fun deleteExchangeRates(fromCurrency: String, toCurrencies: List<String>) {
