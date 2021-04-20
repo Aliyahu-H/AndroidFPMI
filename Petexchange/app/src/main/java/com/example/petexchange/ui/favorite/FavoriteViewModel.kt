@@ -1,20 +1,33 @@
 package com.example.petexchange.ui.favorite
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.petexchange.R
 import com.example.petexchange.ui.currency.Currency
+import com.example.petexchange.ui.currency.DataSourceFavorite
+import kotlin.random.Random
 
-class FavoriteViewModel : ViewModel() {
+class FavoriteViewModel(val dataSource: DataSourceFavorite) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is favorite Fragment"
+    val currencyLiveData = dataSource.getCurrencyList()
+
+    fun insertCurrency(currency: Currency?) {
+        dataSource.addCurrency(currency)
     }
+}
 
-    private val _currencyList = (0..30).map{
-        Currency(R.drawable.ic_dollar, "USD", .0)
+class FavoriteViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return FavoriteViewModel(
+                    dataSource = DataSourceFavorite.getDataSource(context.resources)
+            ) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
-
-        val currencyList: List<Currency> = _currencyList
 }

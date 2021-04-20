@@ -25,11 +25,15 @@ class FavoriteFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         favoriteViewModel =
-                ViewModelProvider(this).get(FavoriteViewModel::class.java)
+                ViewModelProvider(this, FavoriteViewModelFactory(this.requireContext())).get(FavoriteViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_favorite, container, false)
         val recyclerView: RecyclerView = root.findViewById(R.id.favoriteRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(root.context)
-        recyclerView.adapter = CurrencyAdapter(favoriteViewModel.currencyList)
+        var adapter = CurrencyAdapter(favoriteViewModel.currencyLiveData) {}
+        recyclerView.adapter = adapter
+        favoriteViewModel.currencyLiveData.observe(viewLifecycleOwner, {
+            adapter.notifyDataSetChanged()
+        })
         return root
     }
 }

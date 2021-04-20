@@ -12,4 +12,7 @@
     <string name="menu_schedule">Графики</string>
     <string name="menu_settings">Настройки</string>
     <string name="flag">Flag</string>
+    <string name="add_currency">Добавить избранную валюту</string>
+    <string name="done_button_text">Готово</string>
+    <string name="exchange_to">конвертировать в</string>
 </resources>

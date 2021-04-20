@@ -13,10 +13,6 @@
             android:icon="@drawable/ic_menu_exchange"
             android:title="@string/menu_exchange" />
         <item
-            android:id="@+id/nav_schedule"
-            android:icon="@drawable/ic_menu_schedule"
-            android:title="@string/menu_schedule" />
-        <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_settings"
             android:title="@string/menu_settings" />
