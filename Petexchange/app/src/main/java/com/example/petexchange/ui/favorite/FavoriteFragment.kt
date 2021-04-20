@@ -32,7 +32,7 @@ class FavoriteFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_favorite, container, false)
         val recyclerView: RecyclerView = root.findViewById(R.id.favoriteRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(root.context)
-        var adapter = CurrencyAdapter(favoriteViewModel.currencyLiveData) {}
+        val adapter = CurrencyAdapter(favoriteViewModel.currencyLiveData) {}
         recyclerView.adapter = adapter
         favoriteViewModel.currencyLiveData.observe(viewLifecycleOwner, {
             adapter.notifyDataSetChanged()

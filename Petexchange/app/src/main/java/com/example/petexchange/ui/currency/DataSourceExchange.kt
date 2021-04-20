@@ -14,12 +14,11 @@ class DataSourceExchange(resources: Resources) {
     fun changeFromCurrency(currency: Currency?) {
         val currentList = currenciesFromLiveData.value
         if (currentList == null) {
-            currenciesFromLiveData.postValue(setOf(currency!!))
+            currenciesFromLiveData.postValue(mutableSetOf(currency!!))
         } else {
-            val updatedList = currentList.toMutableSet()
-            updatedList.clear()
-            updatedList.add(currency!!)
-            currenciesFromLiveData.postValue(updatedList)
+            currentList.clear()
+            currentList.add(currency!!)
+            currenciesFromLiveData.postValue(currentList)
         }
     }
 
@@ -27,20 +26,19 @@ class DataSourceExchange(resources: Resources) {
     fun changeToCurrency(currency: Currency?) {
         val currentList = currenciesToLiveData.value
         if (currentList == null) {
-            currenciesToLiveData.postValue(setOf(currency!!))
+            currenciesToLiveData.postValue(mutableSetOf(currency!!))
         } else {
-            val updatedList = currentList.toMutableSet()
-            updatedList.clear()
-            updatedList.add(currency!!)
-            currenciesToLiveData.postValue(updatedList)
+            currentList.clear()
+            currentList.add(currency!!)
+            currenciesToLiveData.postValue(currentList)
         }
     }
 
-    fun getFromCurrencyList(): LiveData<Set<Currency>> {
+    fun getFromCurrencyList(): LiveData<MutableSet<Currency>> {
         return currenciesFromLiveData
     }
 
-    fun getToCurrencyList(): LiveData<Set<Currency>> {
+    fun getToCurrencyList(): LiveData<MutableSet<Currency>> {
         return currenciesToLiveData
     }
 

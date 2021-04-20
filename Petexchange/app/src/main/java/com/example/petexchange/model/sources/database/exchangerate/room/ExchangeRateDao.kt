@@ -6,15 +6,14 @@ import com.example.petexchange.model.sources.database.exchangerate.ExchangeRateS
 
 
 @Dao
-interface ExchangeRateDao: ExchangeRateSaved {
+interface ExchangeRateDao {
     @Query("SELECT * FROM currency_rate")
     suspend fun getAll() : List<CurrencyRate>
 
     @Query("SELECT * FROM currency_rate WHERE from_currency = :fromCurrency")
     suspend fun loadAllExchangeRates(fromCurrency: String) : List<CurrencyRate>
 
-    @Query(
-        "SELECT * FROM currency_rate " +
+    @Query("SELECT * FROM currency_rate " +
                 "WHERE (from_currency = :fromCurrency AND to_currency IN (:toCurrencies))")
     suspend fun loadExchangeRates(fromCurrency: String, toCurrencies: List<String>) : List<CurrencyRate>
 

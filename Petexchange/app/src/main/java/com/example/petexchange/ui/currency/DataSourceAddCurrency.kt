@@ -12,11 +12,10 @@ class DataSourceAddCurrency(resources: Resources) {
     fun addCurrency(currency: Currency?) {
         val currentList = currenciesLiveData.value
         if (currentList == null) {
-            currenciesLiveData.postValue(setOf(currency!!))
+            currenciesLiveData.postValue(mutableSetOf(currency!!))
         } else {
-            val updatedList = currentList.toMutableSet()
-            updatedList.add(currency!!)
-            currenciesLiveData.postValue(updatedList)
+            currentList.add(currency!!)
+            currenciesLiveData.postValue(currentList)
         }
     }
 
@@ -30,7 +29,7 @@ class DataSourceAddCurrency(resources: Resources) {
         }
     }
 
-    fun getCurrencyList(): LiveData<Set<Currency>> {
+    fun getCurrencyList(): LiveData<MutableSet<Currency>> {
         return currenciesLiveData
     }
 

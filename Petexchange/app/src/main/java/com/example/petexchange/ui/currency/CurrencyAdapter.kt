@@ -11,7 +11,7 @@ import com.example.petexchange.R
 import com.example.petexchange.databinding.CurrencyItemBinding
 
 
-class CurrencyAdapter(private val currencies: LiveData<Set<Currency>>, private val onClick: (Currency?) -> Unit) :
+class CurrencyAdapter(private val currencies: LiveData<MutableSet<Currency>>, private val onClick: (Currency?) -> Unit) :
     RecyclerView.Adapter<CurrencyAdapter.CurrencyHolder>() {
 
     class CurrencyHolder(val binding: CurrencyItemBinding, val onClick: (Currency?) -> Unit) : RecyclerView.ViewHolder(binding.root) {
