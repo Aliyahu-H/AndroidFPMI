@@ -37,7 +37,7 @@ class DataSourceFavorite(resources: Resources, val context: Context) {
 
     private suspend fun showAlertMessage(e: RuntimeException) {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Ошибка:")
+        builder.setTitle("Ошибка при добавлении валюты:")
             .setMessage(e.message)
             .setPositiveButton("Ок") {
                     dialog, _ ->  dialog.cancel()
