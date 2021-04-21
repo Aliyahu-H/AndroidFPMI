@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+        <variable
+            type="com.example.petexchange.ui.currency.Echo"
+            name="from"/>
+        <variable
+            type="com.example.petexchange.ui.currency.Echo"
+            name="to"/>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -15,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <View
-            android:id="@+id/line"
+            android:id="@+id/line1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:alpha="0.3"
@@ -28,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_arrow_downward_24"
-            app:layout_constraintTop_toBottomOf="@+id/line"/>
+            app:layout_constraintTop_toBottomOf="@+id/line1"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exchangeToRecyclerView"
@@ -36,6 +45,73 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exchange_to"/>
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.3"
+            android:background="#FF000000"
+            app:layout_constraintTop_toBottomOf="@+id/exchangeToRecyclerView"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/line2" >
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/editTextFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={from.amount}"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_double_arrow"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3">
+
+                <EditText
+                    android:id="@+id/editTextTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={to.amount}"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_exchange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_exchange_text"
+            app:layout_constraintTop_toBottomOf="@+id/linear"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
