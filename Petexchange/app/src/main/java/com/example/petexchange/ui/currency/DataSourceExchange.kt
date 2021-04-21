@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.RuntimeException
 
-class DataSourceExchange(resources: Resources, val context: Context) {
+class DataSourceExchange(resources: Resources, context: Context) {
     private val initialFromCurrencyList = exchangeCurrencyList(resources)
     private val initialToCurrencyList = exchangeCurrencyList(resources)
     private val currenciesFromLiveData = MutableLiveData(initialFromCurrencyList)
@@ -27,7 +27,7 @@ class DataSourceExchange(resources: Resources, val context: Context) {
             RetrofitExchangeRateReceiver(),
             RoomExchangeRateSaved(context))
 
-    private suspend fun showAlertMessage(e: RuntimeException) {
+    private suspend fun showAlertMessage(context: Context, e: RuntimeException) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Ошибка при конвертации:")
             .setMessage(e.message)
@@ -38,19 +38,18 @@ class DataSourceExchange(resources: Resources, val context: Context) {
         withContext(Dispatchers.Main) {builder.show()}
     }
 
-    suspend fun exchange() {
+    suspend fun exchange(context: Context) {
         val newToAmount: Double
         try {
             newToAmount = converter.convert(from!!, to!!, fromEcho.amount.get()?.toDouble()!!)
         } catch (e: RuntimeException) {
-            showAlertMessage(e)
+            showAlertMessage(context, e)
             return
         }
 
         toEcho.amount.set(newToAmount.toString())
     }
 
-    /* Adds currency to liveData and posts value. */
     fun changeFromCurrency(currency: Currency?) {
         val currentList = currenciesFromLiveData.value
         if (currentList == null) {
@@ -62,7 +61,6 @@ class DataSourceExchange(resources: Resources, val context: Context) {
         }
     }
 
-    /* Removes flower from liveData and posts value. */
     fun changeToCurrency(currency: Currency?) {
         val currentList = currenciesToLiveData.value
         if (currentList == null) {

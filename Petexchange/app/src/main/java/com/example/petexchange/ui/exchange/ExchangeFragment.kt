@@ -1,6 +1,7 @@
 package com.example.petexchange.ui.exchange
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -56,7 +57,7 @@ class ExchangeFragment : Fragment() {
             adapterTo.notifyDataSetChanged()
         })
         val exchange: Button = root.findViewById(R.id.btn_exchange)
-        exchange.setOnClickListener { onExchange() }
+        exchange.setOnClickListener { onExchange(this.requireContext()) }
         binding.from = exchangeViewModel.dataSource.fromEcho
         binding.to = exchangeViewModel.dataSource.toEcho
         return root
@@ -93,7 +94,7 @@ class ExchangeFragment : Fragment() {
         }
     }
 
-    private fun onExchange() {
-        exchangeViewModel.exchange()
+    private fun onExchange(context: Context) {
+        exchangeViewModel.exchange(context)
     }
 }
