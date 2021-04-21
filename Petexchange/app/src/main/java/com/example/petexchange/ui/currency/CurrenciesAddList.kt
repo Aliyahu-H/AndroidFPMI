@@ -20,6 +20,7 @@ fun addCurrencyList(resources: Resources): MutableSet<Currency> {
         Currency(R.drawable.ic_coin, "KRW","KRW", 1.0),
         Currency(R.drawable.ic_coin, "PLN","PLN", 1.0),
         Currency(R.drawable.ic_coin, "SSP","SSP", 1.0),
-        Currency(R.drawable.ic_coin, "THB","THB", 1.0)
+        Currency(R.drawable.ic_coin, "THB","THB", 1.0),
+            Currency(R.drawable.ic_coin, "RUB","RUB", 1.0)
     )
 }

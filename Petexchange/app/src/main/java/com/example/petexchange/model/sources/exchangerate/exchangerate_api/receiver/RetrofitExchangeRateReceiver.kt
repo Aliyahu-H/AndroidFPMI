@@ -63,8 +63,8 @@ class RetrofitExchangeRateReceiver() : ExchangeRateReceiver {
     ): Double {
         val exchangeRates: PairExchangeRateAnswer
         try {
-            exchangeRates = exchangeRateApi!!.getExchangeRate(key, fromCurrency, toCurrency)
-        } catch(e: Exception) {
+            exchangeRates = exchangeRateApi!!.getConverting(key, fromCurrency, toCurrency, amount)
+        } catch(e: Throwable) {
             throw RuntimeException("Error occurred in request: " + e.message)
         }
 

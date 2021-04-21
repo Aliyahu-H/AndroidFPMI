@@ -5,6 +5,7 @@ import com.example.petexchange.model.sources.database.exchangerate.ExchangeRateS
 import com.example.petexchange.model.sources.exchangerate.ExchangeRateReceiver
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.roundToInt
 
 class OneDayConverter(
     private val exchangeRateReceiver: ExchangeRateReceiver,
@@ -21,7 +22,7 @@ class OneDayConverter(
         if (fromCurrency != toCurrency) {
             when {
                 savedCurrencyRates.isEmpty() -> {
-                    exchangeRateReceiver.getConversion(fromCurrency, toCurrency, amount)
+                    convertedAmount = exchangeRateReceiver.getConversion(fromCurrency, toCurrency, amount)
                 }
                 checkDate(savedCurrencyRates[0].updateDate) -> {
                     savedCurrencyRates[0].exchangeRate =
@@ -102,23 +103,27 @@ class OneDayConverter(
 
     override suspend fun loadSavedExchangeRates(): List<CurrencyRate> {
         val savedExchangeRates: MutableList<CurrencyRate> = exchangeRateSaved.getAllSavedExchangeRates().toMutableList()
-        val fromCurrencyRates: MutableMap<String, MutableList<CurrencyRate>> = mutableMapOf()
-        val toUpdateFromCurrencies: MutableSet<String> = mutableSetOf()
+        val toCurrencyRates: MutableMap<String, MutableList<CurrencyRate>> = mutableMapOf()
+        val toUpdateToCurrencies: MutableSet<String> = mutableSetOf()
 
         savedExchangeRates.forEach {
-            fromCurrencyRates[it.fromCurrency]?.add(it) ?: fromCurrencyRates.put(it.fromCurrency, mutableListOf(it))
+            toCurrencyRates[it.toCurrency]?.add(it) ?: toCurrencyRates.put(it.toCurrency, mutableListOf(it))
             if (checkDate(it.updateDate) and (it.fromCurrency != it.toCurrency)) {
-                toUpdateFromCurrencies.add(it.fromCurrency)
+                toUpdateToCurrencies.add(it.toCurrency)
             }
         }
 
-        toUpdateFromCurrencies.forEach { fromName ->
-            val newExchangeRates = exchangeRateReceiver.getExchangeRates(fromName)
-            fromCurrencyRates[fromName]?.forEach {
-                it.exchangeRate = newExchangeRates[it.toCurrency]?: -1.0
+        toUpdateToCurrencies.forEach { toName ->
+            val newExchangeRates = exchangeRateReceiver.getExchangeRates(toName)
+            toCurrencyRates[toName]?.forEach {
+                it.exchangeRate = (10000.0 / (newExchangeRates[it.fromCurrency]
+                    ?: -1.0)).roundToInt() / 10000.0
                 it.updateDate = dateFormat.format(Calendar.getInstance().time)
             }
+
+            exchangeRateSaved.updateExchangeRates(toCurrencyRates[toName]?: listOf())
         }
+
         return savedExchangeRates
     }
 

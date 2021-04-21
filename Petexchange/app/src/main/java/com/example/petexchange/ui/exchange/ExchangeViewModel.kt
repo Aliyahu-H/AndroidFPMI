@@ -1,11 +1,15 @@
 package com.example.petexchange.ui.exchange
 
 import android.content.Context
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.petexchange.ui.currency.Currency
 import com.example.petexchange.ui.currency.DataSourceExchange
 import com.example.petexchange.ui.currency.DataSourceFavorite
+import com.example.petexchange.ui.currency.Echo
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class ExchangeViewModel(val dataSource: DataSourceExchange) : ViewModel() {
 
@@ -14,10 +18,16 @@ class ExchangeViewModel(val dataSource: DataSourceExchange) : ViewModel() {
 
     fun changeFromCurrency(currency: Currency?) {
         dataSource.changeFromCurrency(currency)
+        dataSource.from = currency?.nameFrom
     }
 
     fun changeToCurrency(currency: Currency?) {
         dataSource.changeToCurrency(currency)
+        dataSource.to = currency?.nameFrom
+    }
+
+    fun exchange() {
+        GlobalScope.launch { dataSource.exchange() }
     }
 }
 
@@ -27,7 +37,7 @@ class ExchangeViewModelFactory(private val context: Context) : ViewModelProvider
         if (modelClass.isAssignableFrom(ExchangeViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return ExchangeViewModel(
-                dataSource = DataSourceExchange.getDataSource(context.resources)
+                dataSource = DataSourceExchange.getDataSource(context.resources, context)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
