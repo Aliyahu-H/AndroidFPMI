@@ -46,7 +46,6 @@ class DataSourceFavorite(resources: Resources, context: Context) {
         withContext(Dispatchers.Main) {builder.show()}
     }
 
-    /* Adds currency to liveData and posts value. */
     suspend fun addCurrency(context: Context, _currency: Currency?) {
         val currentList = currenciesLiveData.value
         val exchangeRate: Double
@@ -71,7 +70,6 @@ class DataSourceFavorite(resources: Resources, context: Context) {
         }
     }
 
-    /* Removes flower from liveData and posts value. */
     fun removeCurrency(currency: Currency) {
         val currentList = currenciesLiveData.value
         if (currentList != null) {

@@ -50,7 +50,6 @@ class DataSourceExchange(resources: Resources, context: Context) {
         toEcho.amount.set(newToAmount.toString())
     }
 
-    /* Adds currency to liveData and posts value. */
     fun changeFromCurrency(currency: Currency?) {
         val currentList = currenciesFromLiveData.value
         if (currentList == null) {
@@ -62,7 +61,6 @@ class DataSourceExchange(resources: Resources, context: Context) {
         }
     }
 
-    /* Removes flower from liveData and posts value. */
     fun changeToCurrency(currency: Currency?) {
         val currentList = currenciesToLiveData.value
         if (currentList == null) {

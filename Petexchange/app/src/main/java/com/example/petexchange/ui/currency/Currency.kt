@@ -15,7 +15,6 @@ data class Currency(@DrawableRes var flag: Int, var nameTo: String?, var nameFro
         return 0
     }
 
-    // упаковываем объект в Parcel
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(flag)
         parcel.writeString(nameTo)
@@ -30,7 +29,6 @@ data class Currency(@DrawableRes var flag: Int, var nameTo: String?, var nameFro
         currencyRate.exchangeRate) {
     }
 
-    // конструктор, считывающий данные из Parcel
     private constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString(),
