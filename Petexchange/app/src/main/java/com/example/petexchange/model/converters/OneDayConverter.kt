@@ -22,7 +22,7 @@ class OneDayConverter(
         if (fromCurrency != toCurrency) {
             when {
                 savedCurrencyRates.isEmpty() -> {
-                    exchangeRateReceiver.getConversion(fromCurrency, toCurrency, amount)
+                    convertedAmount = exchangeRateReceiver.getConversion(fromCurrency, toCurrency, amount)
                 }
                 checkDate(savedCurrencyRates[0].updateDate) -> {
                     savedCurrencyRates[0].exchangeRate =
