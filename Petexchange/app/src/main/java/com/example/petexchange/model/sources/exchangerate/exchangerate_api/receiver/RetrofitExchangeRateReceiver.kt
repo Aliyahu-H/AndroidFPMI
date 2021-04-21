@@ -29,11 +29,11 @@ class RetrofitExchangeRateReceiver() : ExchangeRateReceiver {
         try {
             exchangeRates = exchangeRateApi!!.getExchangeRates(key, fromCurrency)
         } catch(e: Exception) {
-            throw RuntimeException("Error occurred in request: " + e.message)
+            throw RuntimeException("Error occurred in request:\n" + e.message)
         }
 
         if (exchangeRates.conversionRates == null) {
-            throw RuntimeException("Error occurred in ExchangeRate-API: " +
+            throw RuntimeException("Error occurred in ExchangeRate-API:\n" +
                     exchangeRates.errorType)
         }
 
@@ -45,11 +45,11 @@ class RetrofitExchangeRateReceiver() : ExchangeRateReceiver {
         try {
             exchangeRates = exchangeRateApi!!.getExchangeRate(key, fromCurrency, toCurrency)
         } catch(e: Exception) {
-            throw RuntimeException("Error occurred in request: " + e.message)
+            throw RuntimeException("Error occurred in request:\n" + e.message)
         }
 
         if (exchangeRates.result != "success") {
-            throw RuntimeException("Error occurred in ExchangeRate-API: " +
+            throw RuntimeException("Error occurred in ExchangeRate-API:\n" +
                     exchangeRates.errorType)
         }
 
@@ -65,11 +65,11 @@ class RetrofitExchangeRateReceiver() : ExchangeRateReceiver {
         try {
             exchangeRates = exchangeRateApi!!.getConverting(key, fromCurrency, toCurrency, amount)
         } catch(e: Throwable) {
-            throw RuntimeException("Error occurred in request: " + e.message)
+            throw RuntimeException("Error occurred in request:\n" + e.message)
         }
 
         if (exchangeRates.result != "success") {
-            throw RuntimeException("Error occurred in ExchangeRate-API: " +
+            throw RuntimeException("Error occurred in ExchangeRate-API:\n" +
                     exchangeRates.errorType)
         }
 

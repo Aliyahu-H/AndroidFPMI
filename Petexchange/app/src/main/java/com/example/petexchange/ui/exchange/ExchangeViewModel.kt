@@ -1,13 +1,10 @@
 package com.example.petexchange.ui.exchange
 
 import android.content.Context
-import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.petexchange.ui.currency.Currency
 import com.example.petexchange.ui.currency.DataSourceExchange
-import com.example.petexchange.ui.currency.DataSourceFavorite
-import com.example.petexchange.ui.currency.Echo
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

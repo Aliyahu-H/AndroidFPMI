@@ -116,9 +116,10 @@ class OneDayConverter(
         toUpdateToCurrencies.forEach { toName ->
             val newExchangeRates = exchangeRateReceiver.getExchangeRates(toName)
             toCurrencyRates[toName]?.forEach {
-                it.exchangeRate = (10000.0 / (newExchangeRates[it.fromCurrency]
-                    ?: -1.0)).roundToInt() / 10000.0
-                it.updateDate = dateFormat.format(Calendar.getInstance().time)
+                if (newExchangeRates[it.fromCurrency] != null) {
+                    it.exchangeRate = (10000.0 / newExchangeRates[it.fromCurrency]!!).roundToInt() / 10000.0
+                    it.updateDate = dateFormat.format(Calendar.getInstance().time)
+                }
             }
 
             exchangeRateSaved.updateExchangeRates(toCurrencyRates[toName]?: listOf())
