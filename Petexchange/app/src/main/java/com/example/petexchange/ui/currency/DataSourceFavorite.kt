@@ -14,7 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class DataSourceFavorite(resources: Resources, val context: Context) {
+class DataSourceFavorite(resources: Resources, context: Context) {
     private val converter : Converter = OneDayConverter(
         RetrofitExchangeRateReceiver(),
         RoomExchangeRateSaved(context))
@@ -35,7 +35,7 @@ class DataSourceFavorite(resources: Resources, val context: Context) {
         }
     }
 
-    private suspend fun showAlertMessage(e: RuntimeException) {
+    private suspend fun showAlertMessage(context: Context, e: RuntimeException) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Ошибка при добавлении валюты:")
             .setMessage(e.message)
@@ -47,7 +47,7 @@ class DataSourceFavorite(resources: Resources, val context: Context) {
     }
 
     /* Adds currency to liveData and posts value. */
-    suspend fun addCurrency(_currency: Currency?) {
+    suspend fun addCurrency(context: Context, _currency: Currency?) {
         val currentList = currenciesLiveData.value
         val exchangeRate: Double
         try {
@@ -56,7 +56,7 @@ class DataSourceFavorite(resources: Resources, val context: Context) {
                 currentList?.elementAt(0)?.nameTo!!
             )
         } catch (e: RuntimeException) {
-            showAlertMessage(e)
+            showAlertMessage(context, e)
             return
         }
 

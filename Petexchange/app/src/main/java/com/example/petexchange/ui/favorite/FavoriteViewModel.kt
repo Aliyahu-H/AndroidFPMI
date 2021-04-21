@@ -13,8 +13,8 @@ class FavoriteViewModel(val dataSource: DataSourceFavorite) : ViewModel() {
 
     val currencyLiveData = dataSource.getCurrencyList()
 
-    fun insertCurrency(currency: Currency?) {
-        GlobalScope.launch {dataSource.addCurrency(currency)}
+    fun insertCurrency(context: Context, currency: Currency?) {
+        GlobalScope.launch {dataSource.addCurrency(context, currency)}
     }
 }
 

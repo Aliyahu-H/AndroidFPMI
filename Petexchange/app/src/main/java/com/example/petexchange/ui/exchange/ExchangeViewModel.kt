@@ -23,8 +23,8 @@ class ExchangeViewModel(val dataSource: DataSourceExchange) : ViewModel() {
         dataSource.to = currency?.nameFrom
     }
 
-    fun exchange() {
-        GlobalScope.launch { dataSource.exchange() }
+    fun exchange(context: Context) {
+        GlobalScope.launch { dataSource.exchange(context) }
     }
 }
 

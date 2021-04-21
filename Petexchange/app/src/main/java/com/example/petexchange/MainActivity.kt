@@ -20,6 +20,7 @@ import com.example.petexchange.ui.addCurrency.*
 import com.example.petexchange.ui.currency.Currency
 import com.example.petexchange.ui.favorite.FavoriteViewModel
 import com.example.petexchange.ui.favorite.FavoriteViewModelFactory
+import kotlin.coroutines.coroutineContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -72,8 +73,7 @@ class MainActivity : AppCompatActivity() {
         /* Inserts flower into viewModel. */
         if (requestCode == newCurrencyActivityRequestCode && resultCode == Activity.RESULT_OK) {
             val currency: Currency? = intentData?.getParcelableExtra(CURRENCY)
-
-            favoriteViewModel.insertCurrency(currency)
+            favoriteViewModel.insertCurrency(this, currency)
         }
     }
 }
