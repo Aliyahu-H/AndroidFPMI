@@ -2,14 +2,18 @@ package com.example.petexchange.ui.currency
 
 import android.content.Context
 import android.content.res.Resources
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.petexchange.model.converters.Converter
 import com.example.petexchange.model.converters.OneDayConverter
 import com.example.petexchange.model.sources.database.exchangerate.room.RoomExchangeRateSaved
 import com.example.petexchange.model.sources.exchangerate.exchangerate_api.receiver.RetrofitExchangeRateReceiver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.lang.RuntimeException
 
-class DataSourceExchange(resources: Resources, context: Context) {
+class DataSourceExchange(resources: Resources, val context: Context) {
     private val initialFromCurrencyList = exchangeCurrencyList(resources)
     private val initialToCurrencyList = exchangeCurrencyList(resources)
     private val currenciesFromLiveData = MutableLiveData(initialFromCurrencyList)
@@ -23,8 +27,26 @@ class DataSourceExchange(resources: Resources, context: Context) {
             RetrofitExchangeRateReceiver(),
             RoomExchangeRateSaved(context))
 
+    private suspend fun showAlertMessage(e: RuntimeException) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Ошибка при конвертации:")
+            .setMessage(e.message)
+            .setPositiveButton("Ок") {
+                    dialog, _ ->  dialog.cancel()
+            }
+
+        withContext(Dispatchers.Main) {builder.show()}
+    }
+
     suspend fun exchange() {
-        val newToAmount = converter.convert(from!!, to!!, fromEcho.amount.get()?.toDouble()!!)
+        val newToAmount: Double
+        try {
+            newToAmount = converter.convert(from!!, to!!, fromEcho.amount.get()?.toDouble()!!)
+        } catch (e: RuntimeException) {
+            showAlertMessage(e)
+            return
+        }
+
         toEcho.amount.set(newToAmount.toString())
     }
 
