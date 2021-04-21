@@ -15,4 +15,5 @@
     <string name="add_currency">Выберите валюту</string>
     <string name="done_button_text">Готово</string>
     <string name="exchange_to">конвертировать в</string>
+    <string name="btn_exchange_text">Конвертировать</string>
 </resources>
