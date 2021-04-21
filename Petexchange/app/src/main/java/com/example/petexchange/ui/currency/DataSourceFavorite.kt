@@ -10,8 +10,11 @@ import com.example.petexchange.model.converters.OneDayConverter
 import com.example.petexchange.model.sources.database.exchangerate.room.RoomExchangeRateSaved
 import com.example.petexchange.model.sources.exchangerate.exchangerate_api.receiver.RetrofitExchangeRateReceiver
 import java.lang.RuntimeException
+import androidx.appcompat.app.AlertDialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class DataSourceFavorite(resources: Resources, context: Context) {
+class DataSourceFavorite(resources: Resources, val context: Context) {
     private val converter : Converter = OneDayConverter(
         RetrofitExchangeRateReceiver(),
         RoomExchangeRateSaved(context))
@@ -32,8 +35,15 @@ class DataSourceFavorite(resources: Resources, context: Context) {
         }
     }
 
-    fun showAlertMessage(e: RuntimeException) {
-        
+    private suspend fun showAlertMessage(e: RuntimeException) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Ошибка:")
+            .setMessage(e.message)
+            .setPositiveButton("Ок") {
+                    dialog, _ ->  dialog.cancel()
+            }
+
+        withContext(Dispatchers.Main) {builder.show()}
     }
 
     /* Adds currency to liveData and posts value. */
@@ -46,7 +56,7 @@ class DataSourceFavorite(resources: Resources, context: Context) {
                 currentList?.elementAt(0)?.nameTo!!
             )
         } catch (e: RuntimeException) {
-
+            showAlertMessage(e)
             return
         }
 
