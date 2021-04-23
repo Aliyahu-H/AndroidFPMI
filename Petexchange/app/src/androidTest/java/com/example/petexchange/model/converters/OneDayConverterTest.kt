@@ -1,5 +1,6 @@
 package com.example.petexchange.model.converters
 
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.petexchange.model.sources.database.CurrencyRate
 import com.example.petexchange.model.sources.database.exchangerate.ExchangeRateSaved
@@ -65,7 +66,31 @@ class OneDayConverterTest {
     }
 
     @Test
-    fun testDeleteExchangeRates() {}
+    fun testLoadSavedExchangeRates() {
+        val converter = OneDayConverter(dummyExchangeRateReceiver, dummyExchangeRateSaved)
+        runBlocking {
+            val realValues = listOf<CurrencyRate>(
+                    CurrencyRate("RUB", "RUB", 1.0, dateFormat.format(Calendar.getInstance().time)),
+                    CurrencyRate("USD", "RUB", 50.0, dateFormat.format(Calendar.getInstance().time)),
+                    CurrencyRate("USD", "EUR", 0.8, dateFormat.format(Calendar.getInstance().time)),
+                    CurrencyRate("EUR", "CUC", 1.25, dateFormat.format(Calendar.getInstance().time)),
+                    CurrencyRate("LLL", "RRR", 1.01, "1971-12-01 GMT")
+            )
+            assertEquals(realValues, converter.loadSavedExchangeRates())
+        }
+    }
+
+    @Test
+    fun testDeleteExchangeRates() {
+        val converter = OneDayConverter(dummyExchangeRateReceiver, dummyExchangeRateSaved)
+        runBlocking {
+            try {
+                converter.deleteExchangeRates("USD", listOf("RUB", "EUR"))
+            } catch (e: RuntimeException) {
+                assertEquals(e.message, "delete")
+            }
+        }
+    }
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd z", Locale.getDefault())
 
@@ -103,7 +128,8 @@ class OneDayConverterTest {
                 CurrencyRate("RUB", "RUB", 1.0, dateFormat.format(Calendar.getInstance().time)),
                 CurrencyRate("USD", "RUB", 25.0, "1971-12-01 GMT"),
                 CurrencyRate("USD", "EUR", 0.5, "1971-12-01 GMT"),
-                CurrencyRate("EUR", "CUC", 1.25, dateFormat.format(Calendar.getInstance().time))
+                CurrencyRate("EUR", "CUC", 1.25, dateFormat.format(Calendar.getInstance().time)),
+                CurrencyRate("LLL", "RRR", 1.01, "1971-12-01 GMT")
         )
 
         private val fromToCurrencyRates: MutableMap<Pair<String, String> , CurrencyRate> = mutableMapOf()
