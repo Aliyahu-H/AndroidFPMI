@@ -40,9 +40,30 @@ class OneDayConverterTest {
     }
 
     @Test
-    fun testGetCurrencyRate() {}
+    fun testWithoutDatabaseRecordGetCurrencyRate() {
+        val converter = OneDayConverter(dummyExchangeRateReceiver, dummyExchangeRateSaved)
+        runBlocking {
+            assertEquals(8.0, converter.getCurrencyRate("EUR", "BRL"), 0.001)
+            assertEquals(1.25, converter.getCurrencyRate("EUR", "USD"), 0.001)
+        }
+    }
+
     @Test
-    fun testGetCurrencyRates() {}
+    fun testWithNewDatabaseRecordGetCurrencyRate() {
+        val converter = OneDayConverter(dummyExchangeRateReceiver, dummyExchangeRateSaved)
+        runBlocking {
+            assertEquals(1.25, converter.getCurrencyRate("EUR", "CUC"), 0.001)
+        }
+    }
+
+    @Test
+    fun testWithOldDatabaseRecordGetCurrencyRate() {
+        val converter = OneDayConverter(dummyExchangeRateReceiver, dummyExchangeRateSaved)
+        runBlocking {
+            assertEquals(0.8, converter.getCurrencyRate("USD", "EUR"), 0.001)
+        }
+    }
+
     @Test
     fun testDeleteExchangeRates() {}
 
@@ -108,9 +129,7 @@ class OneDayConverterTest {
             return answer
         }
 
-        override suspend fun insertExchangeRates(currencyRates: List<CurrencyRate>) {
-            throw RuntimeException("insert")
-        }
+        override suspend fun insertExchangeRates(currencyRates: List<CurrencyRate>) {}
 
         override suspend fun updateExchangeRates(currencyRates: List<CurrencyRate>) {}
 
