@@ -3,6 +3,7 @@ package com.example.petexchange.model.converters
 import com.example.petexchange.model.sources.database.CurrencyRate
 import com.example.petexchange.model.sources.database.exchangerate.ExchangeRateSaved
 import com.example.petexchange.model.sources.exchangerate.ExchangeRateReceiver
+import java.lang.RuntimeException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -114,15 +115,16 @@ class OneDayConverter(
         }
 
         toUpdateToCurrencies.forEach { toName ->
-            val newExchangeRates = exchangeRateReceiver.getExchangeRates(toName)
-            toCurrencyRates[toName]?.forEach {
-                if (newExchangeRates[it.fromCurrency] != null) {
-                    it.exchangeRate = (10000.0 / newExchangeRates[it.fromCurrency]!!).roundToInt() / 10000.0
-                    it.updateDate = dateFormat.format(Calendar.getInstance().time)
+            try {
+                val newExchangeRates = exchangeRateReceiver.getExchangeRates(toName)
+                toCurrencyRates[toName]?.forEach {
+                    if (newExchangeRates[it.fromCurrency] != null) {
+                        it.exchangeRate = (10000.0 / newExchangeRates[it.fromCurrency]!!).roundToInt() / 10000.0
+                        it.updateDate = dateFormat.format(Calendar.getInstance().time)
+                    }
                 }
-            }
-
-            exchangeRateSaved.updateExchangeRates(toCurrencyRates[toName]?: listOf())
+                exchangeRateSaved.updateExchangeRates(toCurrencyRates[toName] ?: listOf())
+            } catch (ignored : RuntimeException) {}
         }
 
         return savedExchangeRates
